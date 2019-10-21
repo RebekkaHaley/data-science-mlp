@@ -4,7 +4,7 @@ This repository contains code that I have written for both personal projects and
 
 Feel free to contact me if you have any questions!
 
-- Rebekka
+~ Rebekka
 
 ## General overview
 
