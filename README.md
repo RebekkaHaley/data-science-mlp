@@ -10,4 +10,4 @@ Feel free to contact me if you have any questions!
 
 Below is the current list of projects in this repository:
 
-1. MLP/Feed-forward neural network (a simple 2-layer and an N-layer implementation).
+1. MLP/feed-forward neural network (a simple 2-layer and an n-layer implementation).
