@@ -74,13 +74,3 @@ class NeuralNetwork():
             y_preds.append(self.output)
             
         return np.array(y_preds)
-    
-    def display_test_results(self, Xs, y_preds):
-        for i, y in enumerate(y_preds):
-            if y == 0:
-                print(y, '---> light text')
-                display_RGB_colour(colour=tuple(Xs[i, :]), font_col='#fff')
-
-            else:
-                print(y, '---> dark text')
-                display_RGB_colour(colour=tuple(Xs[i, :]), font_col='#000')
