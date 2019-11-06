@@ -2,7 +2,7 @@
 
 This repository contains code that I have written for both personal projects and revision that pertain to my adventures in data science.
 
-Feel free to contact me if you have any questions!
+Feel free to contact me if you have any questions.
 
 ~ Rebekka
 
