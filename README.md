@@ -12,4 +12,4 @@ Below is the current list of projects in this repository:
 
 0. The "Data" file contains open source datasets that are mostly from Kaggle. (NB: Currently hidden)
 
-1. MLP/feed-forward neural network (a simple 2-layer and an n-layer implementation).
+1. MLP, aka feed-forward neural network, implemented in both simple 2-layer and n-layer versions.
