@@ -1,8 +1,11 @@
 # Implementation of an n-layer neural network (i.e. a multi-layer perceptron).
 
+# Import libraries:
+import numpy as np
+
 # Define Neuron class:
 class NeuralNetwork():
-    def __init__(self, X, y, bias=1, eta=0.1, n_nodes=2, n_layers=2, Ws=None, linear=False):
+    def __init__(self, X, y, bias=1, eta=0.1, n_nodes=2, n_layers=2, Ws=None, function='sigmoid'):
         '''Initialise internal state of network. CAUTION: when setting own Ws param,
         make sure the matrix dimensions are correct.
         
@@ -33,17 +36,23 @@ class NeuralNetwork():
         # Set the other parameters:
         self.y_true = y
         self.eta = eta
-        self.linear = linear
+        self.function = function
         self.n_layers = n_layers
     
     def activ_func(self, x):
         '''Activation function used during forward pass.'''
         # For linear:
-        if self.linear is True:
+        if self.function == 'linear':
             return x
         # For sigmoid:
-        else:
+        elif self.function == 'sigmoid':
             return 1.0/(1.0 + np.exp(-x))
+        # For ReLU:
+        elif self.function == 'relu':
+        	return x * (x > 0)
+        # For tanh:
+        elif self.function == 'tanh':
+        	return np.tanh(x)
     
     def forwardpass(self):
         '''Runs the forward pass algorithm using the internal state (via self).'''
@@ -53,11 +62,17 @@ class NeuralNetwork():
     def activ_deriv(self, x):
         '''Derivative of the activation function used during backpropagation.'''
         # For linear:
-        if self.linear is True:
-            return 1
+        if self.function == 'linear':
+            return 1.0
         # For sigmoid:
-        else:
+        elif self.function == 'sigmoid':
             return self.activ_func(x)*(1-self.activ_func(x))
+        # For ReLU:
+        elif self.function == 'relu':
+        	return 1.0 * (x > 0)
+        # For tanh:
+        elif self.function == 'tanh':
+        	return 1.0 - np.tanh(x)**2
     
     def error_deriv(self):
         '''Derivative of the error function used during backpropagation.'''
@@ -98,27 +113,30 @@ class NeuralNetwork():
             # Update bias:
             self.biases[i] += -self.eta * deltas[i] * self.biases[i]
 
-    def fit(self, Xs, ys, iterations=1):
+    def fit(self, Xs, ys, epochs=1):
         '''Applies the forward pass and backpropagation algorithms in sequence to fit given training data.
         
         Attributes:
-        iterations -- Number of times to repeat the sequence over whole dataset, aka epochs.'''
+        Xs -- list of training data vectors.
+        ys -- list of training target vectors.
+        epochs -- Number of times to iterate the sequence over whole dataset.'''
         y_preds = []
+        errors = []
         
-        for iteration in range(iterations): # Per iteration.
-            for i, X in enumerate(Xs): # Per data point.
-                # Reset inputs:
-                self.layers[0] = X  # X assigned to input layer.
-                self.y_true = ys[i] # y assigned to y_true.
-                
-                self.forwardpass()
-                self.backprop()
-                
-                # Save the final interation of output layer:
-                if iteration == iterations-1:
-                    y_preds.append(self.layers[-1])
+        for epoch in range(epochs): # Per epoch.
+        	
+            # Reset inputs:
+            i = np.random.randint(Xs.shape[0])
+            self.layers[0] = Xs[i]  # Assign random X (i.e stochastic) to input layer.
+            self.y_true = ys[i] # Assign random y to y_true.
+            
+            self.forwardpass()
+            self.backprop()
+            
+            y_preds.append(self.layers[-1])
+            errors.append(self.error())
                     
-        return np.array(y_preds)
+        return np.array(y_preds), np.array(errors)
     
     def predict(self, Xs):
         '''Applies forward pass using the internal state to the given input data (Xs).

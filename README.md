@@ -10,4 +10,6 @@ Feel free to contact me if you have any questions!
 
 Below is the current list of projects in this repository:
 
+0. "Data" is a file containing open source datasets (mostly from Kaggle).
+
 1. MLP/feed-forward neural network (a simple 2-layer and an n-layer implementation).

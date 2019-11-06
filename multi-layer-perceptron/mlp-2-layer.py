@@ -1,5 +1,8 @@
 # Implementation of a 2-layer neural network (i.e. a multi-layer perceptron).
 
+# Import libraries:
+import numpy as np
+
 # Define Neuron class:
 class NeuralNetwork():
     def __init__(self, X, y, bias=1, eta=0.1, w1=None, w2=None, num_nodes=2, num_hidden=2, linear=False):
