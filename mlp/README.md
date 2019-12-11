@@ -1,7 +1,7 @@
 ## Multilayer perceptron
 
-This folder of my data science repository pertains to the simple machine learning tool the multilayer perceptron (MLP). MLP involves two stages: (1) the forward pass, and (2) back-propagation.
+This folder pertains to a machine learning tool called the multilayer perceptron (MLP). MLPs involve two stages: (1) forward pass, and (2) back-propagation.
 
-The concept is based on taking the single perceptron concept and using multiple of them in a network. The input is turned into output during the forward pass by matrix multiplication. Subsequently, the weights are updated during the back-propagation through gradient descent and differentiation via the chain rule.
+MLPs are based on the idea of taking multiple single perceptrons and connecting them in a network. The input is turned into output during the forward pass via matrix multiplication. Subsequently, the weights are updated during back-propagation, where gradient descent and differentiation via the chain rule are utilised.
 
-This project originally began as an exercise proposed during a university module, but has been fleshed out from a two-layer version into an N-layer version.
+This project originally began as an exercise during a university module, but has since been fleshed out into a two-layer version and an N-layer version.
