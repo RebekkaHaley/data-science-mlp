@@ -8,8 +8,8 @@ Feel free to contact me if you have any questions.
 
 ## General overview
 
-Below is the current list of projects in this repository:
+Below is an up-to-date list of projects in this repository:
 
-0. "data" - contains open source datasets that are mostly from Kaggle. NB: Currently hidden.
+0. "data" - contains open source datasets that are mostly from Kaggle. NB: file is currently hidden.
 
-1. "mlp" - implemented in both simple 2-layer and n-layer versions. Also known as a feed-forward neural network.
+1. "mlp" - implemented in both simple 2-layer and n-layer versions. Is also known as a feed-forward neural network.
