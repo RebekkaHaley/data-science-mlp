@@ -1,29 +1,11 @@
-## Welcome!
+## Welcome
 
-This repository contains code for both personal projects and scripting practice related to my adventures in data science.
+This repo contains code pertaining to a machine learning tool called the multilayer perceptron (MLP). It has been implemented in both simple 2-layer and n-layer versions, and is also known as a feed-forward neural network.
 
-Feel free to contact me if you have any questions.
+This project originally began as an exercise during a university module, but has since been fleshed out into a two-layer version and an N-layer version.
 
-~ Rebekka
+## Multilayer perceptron
 
-## General overview
+MLPs involve two stages: (1) the forward pass, and (2) back-propagation.
 
-Below is an index of all the projects in this repository:
-
-0. "data" - Contains open source datasets that are mostly from Kaggle. NB: folder is currently hidden.
-
-1. "mlp" - Implemented in both simple 2-layer and n-layer versions. Also known as a feed-forward neural network.
-
-2. "feature-encoding" - WIP
-
-3. "map-reduce" - WIP
-
-4. "metrics" - WIP
-
-5. "nmf" - WIP
-
-6. "pca" - WIP
-
-7. "regression" - WIP
-
-8. "web-scraping" - WIP
+MLPs are based on the idea of taking multiple single perceptrons and connecting them in a network. The input is turned into output during the forward pass via matrix multiplication. Subsequently, the weights are updated during back-propagation, where gradient descent and differentiation via the chain rule are utilised.
