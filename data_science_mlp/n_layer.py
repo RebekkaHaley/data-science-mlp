@@ -1,19 +1,19 @@
-# Implementation of an n-layer neural network (i.e. a multi-layer perceptron).
-
 import numpy as np
 from rgb import display_RGB_colour
 
 
 # Define Neuron class:
 class NeuralNetwork():
+    """An n-layer neural network (i.e. a multi-layer perceptron).
+
+    CAUTION: Please make sure the matrix dimensions are correct when setting own 'Ws' param.
+
+    Args:
+        X (np.array): Initial input vector.
+        y (np.array): Initial y_true.
+        Ws (np.array): Optional. List of weights.
+    """
     def __init__(self, X, y, bias=1, eta=0.1, n_nodes=2, n_layers=2, Ws=None, linear=False):
-        """Initialise internal state of network. CAUTION: when setting own Ws param,
-        make sure the matrix dimensions are correct.
-        
-        Attributes:
-        X -- Initial input vector; should be a numpy array or matrix.
-        y -- Initial y_true; should be numpy array.
-        Ws -- Optional. If given should be a list of numpy arrays."""
         # Create list of LAYERS:
         self.layers = []
         self.layers.append(X) # Append input layer.
@@ -42,7 +42,8 @@ class NeuralNetwork():
 
 
     def activ_func(self, x):
-        """Activation function used during forward pass."""
+        """Activation function used during forward pass.
+        """
         # For linear:
         if self.linear is True:
             return x
@@ -58,13 +59,15 @@ class NeuralNetwork():
 
 
     def forwardpass(self):
-        """Runs the forward pass algorithm using the internal state (via self)."""
+        """Runs the forward pass algorithm using the internal state (via self).
+        """
         for i in range(self.n_layers):
             self.layers[i+1] = self.activ_func(np.dot(self.Ws[i], self.layers[i]) + self.biases[i])
 
 
     def activ_deriv(self, x):
-        """Derivative of the activation function used during backpropagation."""
+        """Derivative of the activation function used during backpropagation.
+        """
         # For linear:
         if self.linear is True:
             return 1.0
@@ -80,19 +83,24 @@ class NeuralNetwork():
 
 
     def error_deriv(self):
-        """Derivative of the error function used during backpropagation."""
+        """Derivative of the error function used during backpropagation.
+        """
         return -(self.y_true-self.layers[-1])
 
 
     def error(self):
-        """Error function."""
+        """Error function.
+        """
         return ((self.y_true-self.layers[-1])**2)*0.5
 
 
     def backprop(self):
-        """Runs backpropagation algorithm using the internal state (via self):
+        """Runs backpropagation algorithm using the internal state (via self).
+
+        Steps:
         (1) applies chain rule to find derivative of loss function;
-        (2) updates the weights and biases with the gradient of the loss function."""
+        (2) updates the weights and biases with the gradient of the loss function.
+        """
         # Initialise lists to contain deltas:
         deltas = []
         
@@ -123,14 +131,14 @@ class NeuralNetwork():
 
     def fit(self, Xs, ys, iterations=1):
         """Applies the forward pass and backpropagation algorithms in sequence to fit given training data.
-        
-        Attributes:
-        Xs -- list of training data vectors.
-        ys -- list of training target vectors.
-        iterations -- Number of times to repeat the sequence over whole dataset."""
+
+        Args:
+            Xs (np.array): List of training data vectors.
+            ys (np.array): List of training target vectors.
+            iterations (int): Number of times to repeat the sequence over whole dataset.
+        """
         y_preds = []
         errors = []
-        
         for iteration in range(iterations):
             for i, X in enumerate(Xs):
                 # Reset inputs:
@@ -144,37 +152,36 @@ class NeuralNetwork():
                 if iteration == iterations-1:
                     y_preds.append(self.layers[-1])
                     errors.append(self.error())
-                    
         return np.array(y_preds), np.array(errors)
 
 
     def predict(self, Xs):
         """Applies forward pass using the internal state to the given input data (Xs).
-        
-        Attributes:
-        Xs -- Input data."""
+
+        Args:
+            Xs (np.array): Input data.
+        """
         y_preds = []
-        
         for X in Xs: # Per data point.
             self.layers[0] = X # X assigned to input layer.
             self.forwardpass()
             y_preds.append(self.layers[-1])
-            
         return np.array(y_preds)
 
 
     def display_test_results(self, Xs, y_preds):
         """Will plot a figure of a given colour (via Xs) and its predicted text colour (via y_preds).
+
         NB: specific to the "text predictor" scenario.
         
-        Attributes:
-        Xs -- Input data.
-        y_preds -- Predicted colours."""
+        Args:
+            Xs (np.array): Input data.
+            y_preds (np.array): Predicted colours.
+        """
         for i, y in enumerate(y_preds):
             if y == 0:
                 print('\n--->\t{}:\tlight text'.format(y))
                 display_RGB_colour(colour=tuple(Xs[i, :]), font_col='#fff')
-
             else:
                 print('\n--->\t{}:\dark text'.format(y))
                 display_RGB_colour(colour=tuple(Xs[i, :]), font_col='#000')
