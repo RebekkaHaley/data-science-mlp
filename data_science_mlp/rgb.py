@@ -1,3 +1,8 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from PIL import Image, ImageDraw, ImageFont, ImageEnhance
+
+
 class Error(Exception):
     """Base class for exceptions in this module."""
     pass
