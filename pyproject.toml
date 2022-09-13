@@ -10,6 +10,7 @@ packages = [{include = "data_science_mlp"}]
 python = "^3.10"
 jupyter = "^1.0.0"
 numpy = "^1.23.3"
+pytest = "^7.1.3"
 
 
 [build-system]
