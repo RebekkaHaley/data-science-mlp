@@ -1,4 +1,5 @@
 import pytest
+from PIL import Image
 
 from data_science_mlp.rgb import InputError, RGB, generate_RGB_data
 
@@ -30,9 +31,27 @@ def test_rgb_invalid_under() -> None:
         RGB(dummy_colour[0], dummy_colour[1], dummy_colour[2])
 
 
-def test_generate_rbg_data() -> None:
+def test_rgb_generate_img() -> None:
+    dummy_colour = (11, 22, 33)
+    dummy_font_col = '#fff'
+    dummy_rgb = RGB(dummy_colour[0], dummy_colour[1], dummy_colour[2])
+    dummy_rgb.generate_img(dummy_font_col)
+    assert type(dummy_rgb.img) == type(Image.new(mode='RGB', size=(100, 100)))
+    assert dummy_rgb.img.mode == 'RGB'
+    assert dummy_rgb.img.size == (100, 100)
+
+
+def test_generate_rbg_data_extreme_true() -> None:
     rgb_X = 5
     rgb_extreme = True
+    rgb_data = generate_RGB_data(X=rgb_X, extreme=rgb_extreme)
+    assert type(rgb_data[0].RGB) == tuple
+    assert len(rgb_data) == rgb_X
+
+
+def test_generate_rbg_data_extreme_false() -> None:
+    rgb_X = 5
+    rgb_extreme = False
     rgb_data = generate_RGB_data(X=rgb_X, extreme=rgb_extreme)
     assert type(rgb_data[0].RGB) == tuple
     assert len(rgb_data) == rgb_X
