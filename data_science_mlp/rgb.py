@@ -41,17 +41,15 @@ class RGB():
         self.hex = '#{:02X}{:02X}{:02X}'.format(self.R,self.G,self.B)
     
 
-    def display(self, font_col):
-        """Displays RGB value as a coloured box with text of the given font colour.
+    def generate_img(self, font_col):
+        """Generates an image of an RGB-coloured box with text of the given font colour.
 
         Args:
             font_col (str): A hex value.
         """
-        img = Image.new(mode='RGB', size=(100, 100), color=self.RGB)
-        img_draw = ImageDraw.Draw(img)
+        self.img = Image.new(mode='RGB', size=(100, 100), color=self.RGB)
+        img_draw = ImageDraw.Draw(self.img)
         img_draw.text((36, 45), 'Text', fill=font_col)
-        plt.imshow(img)
-        plt.show()
 
 
 def generate_RGB_data(X, extreme=False, extreme_magnitude=200):
