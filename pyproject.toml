@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "data-science-mlp"
+version = "0.1.0"
+description = ""
+authors = ["Rebekka Haley <rebekka.haley@gmail.com>"]
+readme = "README.md"
+packages = [{include = "data_science_mlp"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+jupyter = "^1.0.0"
+numpy = "^1.23.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
