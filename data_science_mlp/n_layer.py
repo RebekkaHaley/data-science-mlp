@@ -1,5 +1,4 @@
 import numpy as np
-from rgb import display_RGB_colour
 
 
 # Define Neuron class:

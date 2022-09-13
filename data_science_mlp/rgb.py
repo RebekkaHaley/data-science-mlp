@@ -13,7 +13,7 @@ class InputError(Error):
     """Exception raised for errors in the input.
     
     Args:
-        expr (int): Input expression in which the error occurred.
+        expr (obj): Input expression in which the error occurred.
         msg  (str): Explanation of the error.
     """
     def __init__(self, expr, msg):
@@ -39,6 +39,19 @@ class RGB():
         self.RGB = (R, G, B)
         # Automatically converts RGB to hex values
         self.hex = '#{:02X}{:02X}{:02X}'.format(self.R,self.G,self.B)
+    
+
+    def display(self, font_col):
+        """Displays RGB value as a coloured box with text of the given font colour.
+
+        Args:
+            font_col (str): A hex value.
+        """
+        img = Image.new(mode='RGB', size=(100, 100), color=self.RGB)
+        img_draw = ImageDraw.Draw(img)
+        img_draw.text((36, 45), 'Text', fill=font_col)
+        plt.imshow(img)
+        plt.show()
 
 
 def generate_RGB_data(X, extreme=False, extreme_magnitude=200):
@@ -60,24 +73,9 @@ def generate_RGB_data(X, extreme=False, extreme_magnitude=200):
                       np.random.randint(low=minimum, high=maximum),
                       np.random.randint(low=minimum, high=maximum))
             cols.append(rgb)
-        return cols
-                        
+        return cols     
     else:
         return [RGB(np.random.randint(0, 255),
                     np.random.randint(0, 255),
                     np.random.randint(0, 255))
                 for i in range(X)]
-
-
-def display_RGB_colour(colour, font_col='#000'):
-    """Draws a box of a given colour and fills with text of a given font colour.
-    
-    Args:
-        colour (str): String containing a RGB or hex value.
-        font_col (str): String containing a RGB or hex value.
-    """
-    img = Image.new(mode='RGB', size=(100, 100), color=colour)
-    img_draw = ImageDraw.Draw(img)
-    img_draw.text((36, 45), 'Text', fill=font_col)
-    plt.imshow(img)
-    plt.show()
