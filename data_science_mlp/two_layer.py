@@ -1,7 +1,8 @@
 # Implementation of a 2-layer neural network (i.e. a multi-layer perceptron).
 
-# Import libraries:
 import numpy as np
+from rgb import display_RGB_colour
+
 
 # Define Neuron class:
 class NeuralNetwork():
@@ -36,7 +37,7 @@ class NeuralNetwork():
         return -(self.y-self.output)
     
     def backprop(self):
-        '''Apply chain rule to find derivative of loss function.'''
+        """Apply chain rule to find derivative of loss function."""
         # Output layer:
         big_delta = self.error_deriv() * self.activ_deriv(x=np.dot(self.w2, self.layer1))
         output_unit = -self.eta * np.dot(big_delta, self.layer1.T)
@@ -45,7 +46,7 @@ class NeuralNetwork():
         sml_delta = np.dot(big_delta.T, self.w2).T * self.activ_deriv(x=np.dot(self.w1, self.X))        
         hidden_unit = -self.eta * np.dot(sml_delta, self.X.T)
         
-        '''Update the weights and biases with the derivative (slope) of the loss function.'''
+        """Update the weights and biases with the derivative (slope) of the loss function."""
         # Weights:
         self.w2 += output_unit
         self.w1 += hidden_unit
@@ -77,3 +78,13 @@ class NeuralNetwork():
             y_preds.append(self.output)
             
         return np.array(y_preds)
+    
+    def display_test_results(self, Xs, y_preds):
+        for i, y in enumerate(y_preds):
+            if y == 0:
+                print(y, '---> light text')
+                display_RGB_colour(colour=tuple(Xs[i, :]), font_col='#fff')
+
+            else:
+                print(y, '---> dark text')
+                display_RGB_colour(colour=tuple(Xs[i, :]), font_col='#000')
