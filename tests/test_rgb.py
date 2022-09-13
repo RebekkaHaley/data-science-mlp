@@ -41,7 +41,7 @@ def test_rgb_generate_img() -> None:
     assert dummy_rgb.img.size == (100, 100)
 
 
-def test_generate_rbg_data_extreme_true() -> None:
+def test_generate_rgb_data_extreme_true() -> None:
     rgb_X = 5
     rgb_extreme = True
     rgb_data = generate_RGB_data(X=rgb_X, extreme=rgb_extreme)
@@ -49,7 +49,7 @@ def test_generate_rbg_data_extreme_true() -> None:
     assert len(rgb_data) == rgb_X
 
 
-def test_generate_rbg_data_extreme_false() -> None:
+def test_generate_rgb_data_extreme_false() -> None:
     rgb_X = 5
     rgb_extreme = False
     rgb_data = generate_RGB_data(X=rgb_X, extreme=rgb_extreme)
