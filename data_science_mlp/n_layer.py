@@ -39,7 +39,8 @@ class NeuralNetwork():
         self.eta = eta
         self.linear = linear
         self.n_layers = n_layers
-    
+
+
     def activ_func(self, x):
         """Activation function used during forward pass."""
         # For linear:
@@ -54,11 +55,13 @@ class NeuralNetwork():
         # For sigmoid:
         else:
             return 1.0/(1.0 + np.exp(-x))
-    
+
+
     def forwardpass(self):
         """Runs the forward pass algorithm using the internal state (via self)."""
         for i in range(self.n_layers):
             self.layers[i+1] = self.activ_func(np.dot(self.Ws[i], self.layers[i]) + self.biases[i])
+
 
     def activ_deriv(self, x):
         """Derivative of the activation function used during backpropagation."""
@@ -74,15 +77,18 @@ class NeuralNetwork():
         # For sigmoid:
         else:
             return self.activ_func(x)*(1-self.activ_func(x))
-    
+
+
     def error_deriv(self):
         """Derivative of the error function used during backpropagation."""
         return -(self.y_true-self.layers[-1])
-    
+
+
     def error(self):
         """Error function."""
         return ((self.y_true-self.layers[-1])**2)*0.5
-    
+
+
     def backprop(self):
         """Runs backpropagation algorithm using the internal state (via self):
         (1) applies chain rule to find derivative of loss function;
@@ -114,6 +120,7 @@ class NeuralNetwork():
             # Update bias:
             self.biases[i] += -self.eta * deltas[i] * self.biases[i]
 
+
     def fit(self, Xs, ys, iterations=1):
         """Applies the forward pass and backpropagation algorithms in sequence to fit given training data.
         
@@ -139,7 +146,8 @@ class NeuralNetwork():
                     errors.append(self.error())
                     
         return np.array(y_preds), np.array(errors)
-    
+
+
     def predict(self, Xs):
         """Applies forward pass using the internal state to the given input data (Xs).
         
@@ -153,6 +161,7 @@ class NeuralNetwork():
             y_preds.append(self.layers[-1])
             
         return np.array(y_preds)
+
 
     def display_test_results(self, Xs, y_preds):
         """Will plot a figure of a given colour (via Xs) and its predicted text colour (via y_preds).
