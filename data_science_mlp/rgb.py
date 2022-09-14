@@ -1,17 +1,19 @@
+"""
+Python class representing RGB colour value.
+"""
+
 import numpy as np
-import matplotlib.pyplot as plt
 from PIL import Image, ImageDraw
 
 
 class Error(Exception):
     """Base class for exceptions in this module.
     """
-    pass
 
 
 class InputError(Error):
     """Exception raised for errors in the input.
-    
+
     Args:
         expr (obj): Input expression in which the error occurred.
         msg  (str): Explanation of the error.
@@ -23,23 +25,23 @@ class InputError(Error):
 
 class RGB():
     """An RGB colour value.
-    
+
     Args:
-        R (int): Input R value should range from 0 to 255.
-        G (int): Input G value should range from 0 to 255.
-        B (int): Input B value should range from 0 to 255.
+        r_value (int): Input R value should range from 0 to 255.
+        g_value (int): Input G value should range from 0 to 255.
+        b_value (int): Input B value should range from 0 to 255.
     """
-    def __init__(self, R, G, B):
-        for X in [R, G, B]:
-            if (X < 0) or (X > 255):
-                raise InputError(X, 'Not an RGB value.')
-        self.R = R
-        self.G = G
-        self.B = B
-        self.RGB = (R, G, B)
-        # Automatically converts RGB to hex values
-        self.hex = '#{:02X}{:02X}{:02X}'.format(self.R,self.G,self.B)
-    
+    def __init__(self, r_value, g_value, b_value):
+        for value in [r_value, g_value, b_value]:
+            if (value < 0) or (value > 255):
+                raise InputError(value, 'Not an RGB value.')
+        self.r_value = r_value
+        self.g_value = g_value
+        self.b_value = b_value
+        self.RGB = (r_value, g_value, b_value)
+        self.hex = f'#{self.r_value:02X}{self.g_value:02X}{self.b_value:02X}'
+        self.img = None
+
 
     def generate_img(self, font_col):
         """Generates an image of an RGB-coloured box with text of the given font colour.
@@ -52,28 +54,27 @@ class RGB():
         img_draw.text((36, 45), 'Text', fill=font_col)
 
 
-def generate_RGB_data(X, extreme=False, extreme_magnitude=200):
-    """Generates a list filled with X number of RGB class values.
+def generate_rgb_data(size, extreme=False, extreme_magnitude=200):
+    """Generates a list filled with 'size' number of RGB class values.
 
     Can optionally generate cols that are very dark + very light for training.
-    
+
     Args:
-        X (int): Number of desired RGB instances.
+        size (int): Number of desired RGB instances.
         extreme (bool): Optional. Generates very dark + very light cols when True.
         extreme_magnitude (int): Number between 1 and 254.
     """
-    if extreme == True:
+    if extreme is True:
         cols = []
-        for x in range(X):
-            minimum = extreme_magnitude*(x%2)
-            maximum = 255-(extreme_magnitude*(not x%2))
+        for count in range(size):
+            minimum = extreme_magnitude*(count%2)
+            maximum = 255-(extreme_magnitude*(not count%2))
             rgb = RGB(np.random.randint(low=minimum, high=maximum),
                       np.random.randint(low=minimum, high=maximum),
                       np.random.randint(low=minimum, high=maximum))
             cols.append(rgb)
-        return cols     
-    else:
-        return [RGB(np.random.randint(0, 255),
-                    np.random.randint(0, 255),
-                    np.random.randint(0, 255))
-                for i in range(X)]
+        return cols
+    return [RGB(np.random.randint(0, 255),
+                np.random.randint(0, 255),
+                np.random.randint(0, 255))
+            for i in range(size)]

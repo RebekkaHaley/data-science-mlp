@@ -1,3 +1,7 @@
+"""
+Python class housing a two-layer neural network.
+"""
+
 import numpy as np
 
 
@@ -6,57 +10,64 @@ class NeuralNetwork():
     """A 2-layer neural network (i.e. a multi-layer perceptron).
 
     Args:
-        X (np.array): Initial input vector.
-        y (np.array): Initial y_true.
+        x_input (np.array): Initial input vector.
+        y_input (np.array): Initial y_true vector.
         bias (float): ...
-        eta (float): ...
-        w1 (np.array): Optional. List of weights.
-        w2 (np.array): Optional. List of weights.
+        weights_1 (np.array): List of weights.
+        weights_2 (np.array): List of weights.
         num_nodes (int): ...
-        linear (bool): ...
+        eta (float): Adjusts step size for gradient descent.
+        linear (bool): Use linear activation function when true, else use signmoid.
     """
-    def __init__(self, X, y, bias=1, eta=0.1, w1=None, w2=None, num_nodes=2, linear=False):
+    def __init__(self, weights_1=None, weights_2=None, num_nodes=2, bias=1, **kwargs):
         # Initialise internal state of network.
-        self.X = X
-        self.y = y
-        self.eta = eta
-        self.w1 = np.random.rand(num_nodes, self.X.shape[0]) if w1 is None else w1
-        self.w2 = np.random.rand(self.y.shape[0], num_nodes) if w2 is None else w2
-        self.b1 = np.ones((self.w1.shape[0], self.X.shape[1]), dtype=float)*bias
-        self.b2 = np.ones(self.y.shape, dtype=float)*bias
-        self.output = np.zeros(self.y.shape)
-        self.linear = linear
+        self.x_input = kwargs['x_input']
+        self.y_input = kwargs['y_input']
+        self.linear = kwargs['linear']  # set to False for sigmoid
+        self.eta = kwargs['eta']  # default: eta=0.1
+        if weights_1 is None:
+            self.weights_1 = np.random.rand(num_nodes, self.x_input.shape[0])
+        else:
+            self.weights_1 = weights_1
+        if weights_2 is None:
+            self.weights_2 = np.random.rand(self.y_input.shape[0], num_nodes)
+        else:
+            self.weights_2 = weights_2
+        self.bias_1 = np.ones((self.weights_1.shape[0], self.x_input.shape[1]), dtype=float)*bias
+        self.bias_2 = np.ones(self.y_input.shape, dtype=float)*bias
+        self.output = np.zeros(self.y_input.shape)
+        self.layer1 = None
 
 
-    def activ_func(self, x):
-        """Activation function used during forward pass.
+    def activ_func(self, num):
+        """Calculates activation function used during forward pass.
         """
         if self.linear is True: # For linear:
-            return x
-        else: # For sigmoid:
-            return 1.0/(1.0 + np.exp(-x))
+            return num
+        # For sigmoid:
+        return 1.0/(1.0 + np.exp(-num))
 
 
     def forwardpass(self):
         """Runs the forward pass algorithm using the internal state (via self).
         """
-        self.layer1 = self.activ_func(np.dot(self.w1, self.X) + self.b1)
-        self.output = self.activ_func(np.dot(self.w2, self.layer1) + self.b2)
+        self.layer1 = self.activ_func(np.dot(self.weights_1, self.x_input) + self.bias_1)
+        self.output = self.activ_func(np.dot(self.weights_2, self.layer1) + self.bias_2)
 
 
-    def activ_deriv(self, x):
-        """Derivative of the activation function used during backpropagation.
+    def activ_deriv(self, num):
+        """Calculates derivative of the activation function used during backpropagation.
         """
         if self.linear is True: # For linear:
             return 1
-        else: # For sigmoid:
-            return self.activ_func(x)*(1-self.activ_func(x))
+        # For sigmoid:
+        return self.activ_func(num)*(1-self.activ_func(num))
 
 
     def error_deriv(self):
-        """Derivative of the error function used during backpropagation.
+        """Calculates derivative of the error function used during backpropagation.
         """
-        return -(self.y-self.output)
+        return -(self.y_input-self.output)
 
 
     def backprop(self):
@@ -67,29 +78,31 @@ class NeuralNetwork():
         (2) updates the weights and biases with the gradient of the loss function.
         """
         # Output layer:
-        big_delta = self.error_deriv() * self.activ_deriv(x=np.dot(self.w2, self.layer1))
+        active_derivative_1 = self.activ_deriv(num=np.dot(self.weights_2, self.layer1))
+        big_delta = self.error_deriv() * active_derivative_1
         output_unit = -self.eta * np.dot(big_delta, self.layer1.T)
 
         # Hidden layer:
-        sml_delta = np.dot(big_delta.T, self.w2).T * self.activ_deriv(x=np.dot(self.w1, self.X))        
-        hidden_unit = -self.eta * np.dot(sml_delta, self.X.T)
+        active_derivative_2 = self.activ_deriv(num=np.dot(self.weights_1, self.x_input))
+        sml_delta = np.dot(big_delta.T, self.weights_2).T * active_derivative_2
+        hidden_unit = -self.eta * np.dot(sml_delta, self.x_input.T)
 
         # Update the weights and biases with the derivative (slope) of the loss function.
         # Weights:
-        self.w2 += output_unit
-        self.w1 += hidden_unit
+        self.weights_2 += output_unit
+        self.weights_1 += hidden_unit
         # Biases:
-        self.b2 += -self.eta * big_delta * self.b2
-        self.b1 += -self.eta * sml_delta * self.b1
+        self.bias_2 += -self.eta * big_delta * self.bias_2
+        self.bias_1 += -self.eta * sml_delta * self.bias_1
 
 
-    def fit(self, Xs, ys, iterations=20):
-        """Applies the forward pass and backpropagation algorithms in sequence to fit given training data.
+    def fit(self, x_inputs, y_inputs, iterations=20):
+        """Applies forward pass and backpropagation algorithms in sequence to fit training data.
         """
         y_preds = []
-        for i, X in enumerate(Xs): # Per data point:
-            self.X = X
-            self.y = ys[i]
+        for i, x_input in enumerate(x_inputs): # Per data point:
+            self.x_input = x_input
+            self.y_input = y_inputs[i]
             for i in range(iterations): # Per iteration:
                 self.forwardpass()
                 self.backprop()
@@ -97,24 +110,12 @@ class NeuralNetwork():
         return np.array(y_preds)
 
 
-    def predict(self, Xs):
-        """Applies forward pass using the internal state to the given input data (Xs).
+    def predict(self, x_inputs):
+        """Applies forward pass using the internal state to the given input data.
         """
         y_preds = []
-        for X in Xs:
-            self.X = X
+        for x_input in x_inputs:
+            self.x_input = x_input
             self.forwardpass()
             y_preds.append(self.output)
         return np.array(y_preds)
-
-
-    def display_test_results(self, Xs, y_preds):
-        """Will plot a figure of a given colour (via Xs) and its predicted text colour (via y_preds).
-        """
-        for i, y in enumerate(y_preds):
-            if y == 0:
-                print(y, '---> light text')
-                display_RGB_colour(colour=tuple(Xs[i, :]), font_col='#fff')
-            else:
-                print(y, '---> dark text')
-                display_RGB_colour(colour=tuple(Xs[i, :]), font_col='#000')
