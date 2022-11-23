@@ -1,8 +1,8 @@
 ## Welcome
 
-This repo contains code pertaining to a machine learning tool called the multilayer perceptron (MLP). It has been implemented in both simple 2-layer and n-layer versions, and is also known as a feed-forward neural network.
+This repo contains code for a multilayer perceptron (MLP), also known as a feed-forward neural network. It has been implemented in both simple 2-layer and n-layer versions.
 
-This project originally began as an exercise during a university module, but has since been fleshed out into a two-layer version and an n-layer version.
+This project began as an exercise during a university module, but has since been fleshed out into two-layer and n-layer versions.
 
 ## Multilayer perceptron
 
