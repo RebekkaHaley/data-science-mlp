@@ -1,0 +1,17 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+ipykernel = "*"
+numpy = "*"
+pytest = "*"
+pandas = "*"
+matplotlib = "*"
+scipy = "*"
+scikit-learn = "*"
+pytest-cov = "*"
+pylint = "*"
+
+[dev-packages]
